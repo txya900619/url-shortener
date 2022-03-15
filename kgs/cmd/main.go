@@ -1,6 +1,7 @@
 package main
 
 import (
+	"github.com/txya900619/url-shortener/kgs/internal"
 	server_v1 "github.com/txya900619/url-shortener/kgs/internal/api/v1"
 	pb_v1 "github.com/txya900619/url-shortener/kgs/pkg/api/v1"
 	"github.com/txya900619/url-shortener/kgs/pkg/orm"
@@ -31,7 +32,13 @@ func main() {
 	if err != nil {
 		log.Fatalf("failed to generate unused keys: %v", err)
 	}
-	pb_v1.RegisterKeyServiceServer(server, &server_v1.KeyServiceServer{DB: db})
+
+	keyServiceServer, err := server_v1.NewKeyServiceServer(db)
+	if err != nil {
+		log.Fatalf("failed to create key service server: %v", err)
+	}
+
+	pb_v1.RegisterKeyServiceServer(server, keyServiceServer)
 
 	grpc_prometheus.EnableHandlingTimeHistogram()
 	grpc_prometheus.Register(server)
