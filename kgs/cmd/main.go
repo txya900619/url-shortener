@@ -27,7 +27,7 @@ func main() {
 		log.Fatalf("failed to connect to database: %v", err)
 	}
 
-	err = internal.GenerateUnusedKeys(db)
+	err = internal.InsertUnusedKeys(db)
 	if err != nil {
 		log.Fatalf("failed to generate unused keys: %v", err)
 	}
