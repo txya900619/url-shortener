@@ -7,10 +7,12 @@ import (
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 	"google.golang.org/protobuf/types/known/emptypb"
+	"gorm.io/gorm"
 )
 
 type KeyServiceServer struct {
 	pb_v1.UnimplementedKeyServiceServer
+	DB *gorm.DB
 }
 
 func (s *KeyServiceServer) GenerateKey(ctx context.Context, in *emptypb.Empty) (*pb_v1.GenerateKeyResponse, error) {

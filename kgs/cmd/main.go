@@ -3,6 +3,7 @@ package main
 import (
 	server_v1 "github.com/txya900619/url-shortener/kgs/internal/api/v1"
 	pb_v1 "github.com/txya900619/url-shortener/kgs/pkg/api/v1"
+	"github.com/txya900619/url-shortener/kgs/pkg/orm"
 
 	"fmt"
 	"log"
@@ -21,7 +22,12 @@ func main() {
 
 	server := grpc.NewServer(grpc.StreamInterceptor(grpc_prometheus.StreamServerInterceptor), grpc.UnaryInterceptor(grpc_prometheus.UnaryServerInterceptor))
 
-	pb_v1.RegisterKeyServiceServer(server, &server_v1.KeyServiceServer{})
+	db, err := orm.Open()
+	if err != nil {
+		log.Fatalf("failed to connect to database: %v", err)
+	}
+
+	pb_v1.RegisterKeyServiceServer(server, &server_v1.KeyServiceServer{DB: db})
 
 	grpc_prometheus.EnableHandlingTimeHistogram()
 	grpc_prometheus.Register(server)
