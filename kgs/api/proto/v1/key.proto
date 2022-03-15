@@ -16,6 +16,6 @@ message DeleteKeyRequest {
 
 service KeyService {
     rpc GenerateKey (google.protobuf.Empty) returns (GenerateKeyResponse) {}
-    rpc DeleteKey(DeleteKeyRequest) returns (google.protobuf.Empty) {}
+    rpc DeleteKeys(DeleteKeyRequest) returns (google.protobuf.Empty) {}
 }
   

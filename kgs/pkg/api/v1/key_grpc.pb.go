@@ -20,7 +20,7 @@ const _ = grpc.SupportPackageIsVersion7
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type KeyServiceClient interface {
 	GenerateKey(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*GenerateKeyResponse, error)
-	DeleteKey(ctx context.Context, in *DeleteKeyRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
+	DeleteKeys(ctx context.Context, in *DeleteKeyRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
 }
 
 type keyServiceClient struct {
@@ -40,9 +40,9 @@ func (c *keyServiceClient) GenerateKey(ctx context.Context, in *emptypb.Empty, o
 	return out, nil
 }
 
-func (c *keyServiceClient) DeleteKey(ctx context.Context, in *DeleteKeyRequest, opts ...grpc.CallOption) (*emptypb.Empty, error) {
+func (c *keyServiceClient) DeleteKeys(ctx context.Context, in *DeleteKeyRequest, opts ...grpc.CallOption) (*emptypb.Empty, error) {
 	out := new(emptypb.Empty)
-	err := c.cc.Invoke(ctx, "/key.KeyService/DeleteKey", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/key.KeyService/DeleteKeys", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -54,7 +54,7 @@ func (c *keyServiceClient) DeleteKey(ctx context.Context, in *DeleteKeyRequest, 
 // for forward compatibility
 type KeyServiceServer interface {
 	GenerateKey(context.Context, *emptypb.Empty) (*GenerateKeyResponse, error)
-	DeleteKey(context.Context, *DeleteKeyRequest) (*emptypb.Empty, error)
+	DeleteKeys(context.Context, *DeleteKeyRequest) (*emptypb.Empty, error)
 	mustEmbedUnimplementedKeyServiceServer()
 }
 
@@ -65,8 +65,8 @@ type UnimplementedKeyServiceServer struct {
 func (UnimplementedKeyServiceServer) GenerateKey(context.Context, *emptypb.Empty) (*GenerateKeyResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GenerateKey not implemented")
 }
-func (UnimplementedKeyServiceServer) DeleteKey(context.Context, *DeleteKeyRequest) (*emptypb.Empty, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method DeleteKey not implemented")
+func (UnimplementedKeyServiceServer) DeleteKeys(context.Context, *DeleteKeyRequest) (*emptypb.Empty, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DeleteKeys not implemented")
 }
 func (UnimplementedKeyServiceServer) mustEmbedUnimplementedKeyServiceServer() {}
 
@@ -99,20 +99,20 @@ func _KeyService_GenerateKey_Handler(srv interface{}, ctx context.Context, dec f
 	return interceptor(ctx, in, info, handler)
 }
 
-func _KeyService_DeleteKey_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _KeyService_DeleteKeys_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(DeleteKeyRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(KeyServiceServer).DeleteKey(ctx, in)
+		return srv.(KeyServiceServer).DeleteKeys(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/key.KeyService/DeleteKey",
+		FullMethod: "/key.KeyService/DeleteKeys",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(KeyServiceServer).DeleteKey(ctx, req.(*DeleteKeyRequest))
+		return srv.(KeyServiceServer).DeleteKeys(ctx, req.(*DeleteKeyRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -129,8 +129,8 @@ var KeyService_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _KeyService_GenerateKey_Handler,
 		},
 		{
-			MethodName: "DeleteKey",
-			Handler:    _KeyService_DeleteKey_Handler,
+			MethodName: "DeleteKeys",
+			Handler:    _KeyService_DeleteKeys_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

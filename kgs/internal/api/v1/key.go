@@ -19,6 +19,6 @@ func (s *KeyServiceServer) GenerateKey(ctx context.Context, in *emptypb.Empty) (
 	return nil, status.Errorf(codes.Unimplemented, "method GenerateKey not implemented")
 }
 
-func (s *KeyServiceServer) DeleteKey(ctx context.Context, in *pb_v1.DeleteKeyRequest) (*emptypb.Empty, error) {
+func (s *KeyServiceServer) DeleteKeys(ctx context.Context, in *pb_v1.DeleteKeyRequest) (*emptypb.Empty, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DeleteKey not implemented")
 }
