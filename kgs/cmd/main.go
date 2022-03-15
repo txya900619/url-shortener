@@ -27,6 +27,10 @@ func main() {
 		log.Fatalf("failed to connect to database: %v", err)
 	}
 
+	err = internal.GenerateUnusedKeys(db)
+	if err != nil {
+		log.Fatalf("failed to generate unused keys: %v", err)
+	}
 	pb_v1.RegisterKeyServiceServer(server, &server_v1.KeyServiceServer{DB: db})
 
 	grpc_prometheus.EnableHandlingTimeHistogram()
