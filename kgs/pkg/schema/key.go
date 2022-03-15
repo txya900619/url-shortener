@@ -1,4 +1,4 @@
-package orm
+package schema
 
 type UnusedKey struct {
 	Key string `gorm:"primaryKey"`
