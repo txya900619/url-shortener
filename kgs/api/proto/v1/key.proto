@@ -1,0 +1,21 @@
+syntax = "proto3"; 
+
+import "google/protobuf/empty.proto";
+
+option go_package = "github.com/txya900619/url-shortener/kgs/pkg/api/v1";
+
+package key;
+
+message GenerateKeyResponse {
+    string key = 1;
+}
+
+message DeleteKeyRequest {
+    repeated string keys = 1;
+}
+
+service KeyService {
+    rpc GenerateKey (google.protobuf.Empty) returns (GenerateKeyResponse) {}
+    rpc DeleteKey(DeleteKeyRequest) returns (google.protobuf.Empty) {}
+}
+  
