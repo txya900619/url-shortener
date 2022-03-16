@@ -2,8 +2,8 @@ package main
 
 import (
 	"github.com/txya900619/url-shortener/kgs/internal"
-	server_v1 "github.com/txya900619/url-shortener/kgs/internal/api/v1"
-	pb_v1 "github.com/txya900619/url-shortener/kgs/pkg/api/v1"
+	server_v1 "github.com/txya900619/url-shortener/kgs/internal/grpc/v1"
+	pb_v1 "github.com/txya900619/url-shortener/kgs/pkg/grpc/v1"
 	"github.com/txya900619/url-shortener/kgs/pkg/orm"
 
 	"fmt"

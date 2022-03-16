@@ -2,7 +2,7 @@ syntax = "proto3";
 
 import "google/protobuf/empty.proto";
 
-option go_package = "github.com/txya900619/url-shortener/kgs/pkg/api/v1";
+option go_package = "github.com/txya900619/url-shortener/kgs/pkg/grpc/v1";
 
 package key;
 

@@ -8,7 +8,7 @@ import (
 
 	"context"
 
-	pb_v1 "github.com/txya900619/url-shortener/kgs/pkg/api/v1"
+	pb_v1 "github.com/txya900619/url-shortener/kgs/pkg/grpc/v1"
 	"google.golang.org/protobuf/types/known/emptypb"
 	"gorm.io/gorm"
 )
