@@ -7,16 +7,16 @@ info:
     name: Wayne Chen
     email: wayne900619@gmail.com
 servers:
-  - url: https://{hostname}/api/v1
+  - url: https://{hostname}
     variables:
       hostname:
         default: localhost
 paths:
-  /urls:
+  /api/v1/urls:
     post:
-      operationId: createShortenUrl
+      operationId: createShortUrl
       requestBody:
-        description: needed info to create ShortenUrl
+        description: needed info to create ShortUrl
         required: true
         content:
           application/json:
@@ -24,11 +24,34 @@ paths:
               $ref: '#/components/schemas/PostShortUrl'
       responses:
         '201':
-          description: ShortenUrl
+          description: shortUrl and id
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ShortUrl'
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /{urlId}:
+    get:
+      operationId: redirectToOriginUrl
+      parameters:
+        - in: path
+          name: urlId
+          schema:
+            type: string
+          required: true
+          description: short url id
+      responses:
+        '302':
+          description: redirect to origin url
+          headers:
+            Location:
+              schema:
+                type: string
         default:
           description: unexpected error
           content:
@@ -54,6 +77,11 @@ components:
       required:
         - id
         - shortUrl
+      properties:
+        id:
+          type: string
+        shortUrl:
+          type: string
     Error:
       type: object
       required:
