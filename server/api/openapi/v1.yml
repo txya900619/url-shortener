@@ -1,0 +1,66 @@
+openapi: "3.0.0"
+info:
+  title: URL Shortener V1
+  version: 1.0.0
+  description: URL Shortener using Key Generation Service (KGS)
+  contact:
+    name: Wayne Chen
+    email: wayne900619@gmail.com
+servers:
+  - url: https://{hostname}/api/v1
+    variables:
+      hostname:
+        default: localhost
+paths:
+  /urls:
+    post:
+      operationId: createShortenUrl
+      requestBody:
+        description: needed info to create ShortenUrl
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PostShortUrl'
+      responses:
+        '201':
+          description: ShortenUrl
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ShortUrl'
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+components:
+  schemas:
+    PostShortUrl:
+      type: object
+      required:
+        - url
+        - expireAt
+      properties:
+        url:
+          type: string
+        expireAt:
+          type: string
+          format: date-time
+    ShortUrl:
+      type: object
+      required:
+        - id
+        - shortUrl
+    Error:
+      type: object
+      required:
+        - slug
+        - message
+      properties:
+        slug:
+          type: string
+        message:
+          type: string
