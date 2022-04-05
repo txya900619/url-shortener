@@ -33,15 +33,11 @@ func InsertUnusedKeys(db *gorm.DB) error {
 			return err
 		}
 
-		err = db.Transaction(func(tx *gorm.DB) error {
-			if err := insertUnusedKeys("", 6, tx); err != nil {
-				tx.Rollback()
-				return err
-			}
-			return tx.Commit().Error
+		if err := insertUnusedKeys("", 4, db); err != nil {
+			return err
+		}
 
-		})
-		return err
+		return nil
 	}
 
 	return nil
