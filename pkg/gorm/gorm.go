@@ -1,23 +1,27 @@
-package orm
+package gorm
 
 import (
-	"github.com/txya900619/url-shortener/kgs/pkg/schema"
-
 	"fmt"
 
 	"github.com/spf13/viper"
+	gormotel "github.com/wei840222/gorm-otel"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
+	"gorm.io/plugin/prometheus"
 )
 
 func Open() (*gorm.DB, error) {
-
 	db, err := gorm.Open(postgres.Open(getDsn()), &gorm.Config{})
 	if err != nil {
 		return nil, err
 	}
 
-	err = db.AutoMigrate(&schema.UnusedKey{}, &schema.UsedKey{})
+	err = db.Use(gormotel.New(gormotel.WithLogResult(true), gormotel.WithSqlParameters(true)))
+	if err != nil {
+		return nil, err
+	}
+
+	err = db.Use(prometheus.New(prometheus.Config{}))
 	if err != nil {
 		return nil, err
 	}

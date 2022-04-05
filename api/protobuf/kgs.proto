@@ -2,9 +2,9 @@ syntax = "proto3";
 
 import "google/protobuf/empty.proto";
 
-option go_package = "github.com/txya900619/url-shortener/kgs/pkg/grpc/v1";
+option go_package = "github.com/txya900619/url-shortener/pkg/genproto/kgs";
 
-package key;
+package kgs;
 
 message GenerateKeyResponse {
     string key = 1;

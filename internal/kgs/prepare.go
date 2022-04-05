@@ -1,7 +1,7 @@
-package internal
+package kgs
 
 import (
-	"github.com/txya900619/url-shortener/kgs/pkg/schema"
+	"github.com/txya900619/url-shortener/internal/kgs/schema"
 	"gorm.io/gorm"
 )
 

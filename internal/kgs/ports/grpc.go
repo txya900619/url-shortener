@@ -1,20 +1,20 @@
-package server
+package ports
 
 import (
 	"fmt"
 
-	"github.com/txya900619/url-shortener/kgs/pkg/queue"
-	"github.com/txya900619/url-shortener/kgs/pkg/schema"
+	"github.com/txya900619/url-shortener/internal/kgs/schema"
+	"github.com/txya900619/url-shortener/pkg/queue"
 
 	"context"
 
-	pb_v1 "github.com/txya900619/url-shortener/kgs/pkg/grpc/v1"
+	kgs_grpc "github.com/txya900619/url-shortener/pkg/genproto/kgs"
 	"google.golang.org/protobuf/types/known/emptypb"
 	"gorm.io/gorm"
 )
 
 type KeyServiceServer struct {
-	pb_v1.UnimplementedKeyServiceServer
+	kgs_grpc.UnimplementedKeyServiceServer
 	cacheQueue *queue.StringQueue
 	db         *gorm.DB
 }
@@ -47,7 +47,7 @@ func (s *KeyServiceServer) insertKey() error {
 	return nil
 }
 
-func (s *KeyServiceServer) GenerateKey(ctx context.Context, in *emptypb.Empty) (*pb_v1.GenerateKeyResponse, error) {
+func (s *KeyServiceServer) GenerateKey(ctx context.Context, in *emptypb.Empty) (*kgs_grpc.GenerateKeyResponse, error) {
 	key, err := s.cacheQueue.Remove()
 	if err != nil {
 		key, err = generateKey(s.db)
@@ -58,10 +58,10 @@ func (s *KeyServiceServer) GenerateKey(ctx context.Context, in *emptypb.Empty) (
 
 	go s.insertKey()
 
-	return &pb_v1.GenerateKeyResponse{Key: key}, nil
+	return &kgs_grpc.GenerateKeyResponse{Key: key}, nil
 }
 
-func (s *KeyServiceServer) DeleteKeys(ctx context.Context, in *pb_v1.DeleteKeyRequest) (*emptypb.Empty, error) {
+func (s *KeyServiceServer) DeleteKeys(ctx context.Context, in *kgs_grpc.DeleteKeyRequest) (*emptypb.Empty, error) {
 	err := s.db.Transaction(func(tx *gorm.DB) error {
 		for _, key := range in.Keys {
 			if err := s.db.Delete(&schema.UsedKey{Key: key}).Error; err != nil {
