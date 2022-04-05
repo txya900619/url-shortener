@@ -2,6 +2,7 @@ package ports
 
 import (
 	"fmt"
+	"log"
 
 	"github.com/txya900619/url-shortener/internal/kgs/schema"
 	"github.com/txya900619/url-shortener/pkg/queue"
@@ -21,16 +22,14 @@ type KeyServiceServer struct {
 
 func NewKeyServiceServer(db *gorm.DB) (*KeyServiceServer, error) {
 	cacheQueue := queue.NewStringQueue(100)
-	for i := 0; i < 100; i++ {
-		key, err := generateKey(db)
-		if err != nil {
-			return nil, err
-		}
+	keys, err := generateManyKey(db, 100)
+	if err != nil {
+		log.Printf("generateKey error: %v", err)
+		return nil, err
+	}
 
-		err = cacheQueue.Insert(key)
-		if err != nil {
-			return nil, err
-		}
+	for _, key := range keys {
+		cacheQueue.Insert(key)
 	}
 
 	return &KeyServiceServer{db: db, cacheQueue: cacheQueue}, nil
@@ -91,21 +90,18 @@ func generateKey(db *gorm.DB) (string, error) {
 
 	err := db.Transaction(func(tx *gorm.DB) error {
 		if err := tx.Order("random()").First(&unusedKey).Error; err != nil {
-			tx.Rollback()
 			return err
 		}
 
 		if err := tx.Delete(&unusedKey).Error; err != nil {
-			tx.Rollback()
 			return err
 		}
 
 		if err := tx.Create(&schema.UsedKey{Key: unusedKey.Key}).Error; err != nil {
-			tx.Rollback()
 			return err
 		}
 
-		return tx.Commit().Error
+		return nil
 	})
 
 	if err != nil {
@@ -113,4 +109,39 @@ func generateKey(db *gorm.DB) (string, error) {
 	}
 
 	return unusedKey.Key, nil
+}
+
+func generateManyKey(db *gorm.DB, number int) ([]string, error) {
+	var unusedKeys []schema.UnusedKey
+	var keys []string
+
+	err := db.Transaction(func(tx *gorm.DB) error {
+		if err := tx.Order("random()").Limit(number).Find(&unusedKeys).Error; err != nil {
+			return err
+		}
+
+		keys = make([]string, len(unusedKeys))
+		usedKeys := make([]schema.UsedKey, len(unusedKeys))
+
+		for i, unusedKey := range unusedKeys {
+			keys[i] = unusedKey.Key
+			usedKeys[i] = schema.UsedKey{Key: unusedKey.Key}
+		}
+
+		if err := tx.Delete(&unusedKeys).Error; err != nil {
+			return err
+		}
+
+		if err := tx.Create(&usedKeys).Error; err != nil {
+			return err
+		}
+
+		return nil
+	})
+
+	if err != nil {
+		return keys, err
+	}
+
+	return keys, nil
 }
