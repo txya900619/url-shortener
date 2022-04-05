@@ -36,5 +36,5 @@ func getDsn() string {
 	password := viper.GetString("DB_PASSWORD")
 	dbName := viper.GetString("DB_NAME")
 
-	return fmt.Sprintf("host=%s user=%s password=%s dbname=%s port=%d TimeZone=Asia/Taiwan", host, user, password, dbName, port)
+	return fmt.Sprintf("host=%s user=%s password=%s dbname=%s port=%d sslmode=disable TimeZone=Asia/Taipei", host, user, password, dbName, port)
 }
