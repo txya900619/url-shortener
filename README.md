@@ -1,7 +1,7 @@
 # url-shorterner
 URL Shortener using Key Generation Service (KGS)
 
-# TODO
+## TODO
 - [ ] better logging
 - [ ] repository tests
 - [ ] e2e tests
@@ -11,7 +11,7 @@ URL Shortener using Key Generation Service (KGS)
 - [ ] CI/CD
 - [ ] k8s config (maybe in other repo)
 
-# Getting Started 
+## Getting started 
 1. Install gowatch
 ```bash
 go install github.com/silenceper/gowatch@latest
@@ -50,5 +50,5 @@ cd cmd/shorturl \
 && gowatch
 ```
 
-# How to use
+## How to use
 See [openapi doc](https://github.com/txya900619/url-shortener/blob/main/api/openapi/shorturl.yml)
