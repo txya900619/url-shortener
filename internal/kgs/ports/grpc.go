@@ -89,7 +89,7 @@ func generateKey(db *gorm.DB) (string, error) {
 	var unusedKey schema.UnusedKey
 
 	err := db.Transaction(func(tx *gorm.DB) error {
-		if err := tx.Order("random()").First(&unusedKey).Error; err != nil {
+		if err := tx.Raw("SELECT * FROM unused_keys TABLESAMPLE system_rows(1)").Scan(&unusedKey).Error; err != nil {
 			return err
 		}
 
@@ -112,35 +112,14 @@ func generateKey(db *gorm.DB) (string, error) {
 }
 
 func generateManyKey(db *gorm.DB, number int) ([]string, error) {
-	var unusedKeys []schema.UnusedKey
-	var keys []string
+	keys := make([]string, 0, number)
 
-	err := db.Transaction(func(tx *gorm.DB) error {
-		if err := tx.Order("random()").Limit(number).Find(&unusedKeys).Error; err != nil {
-			return err
+	for i := 0; i < number; i++ {
+		key, err := generateKey(db)
+		if err != nil {
+			return nil, err
 		}
-
-		keys = make([]string, len(unusedKeys))
-		usedKeys := make([]schema.UsedKey, len(unusedKeys))
-
-		for i, unusedKey := range unusedKeys {
-			keys[i] = unusedKey.Key
-			usedKeys[i] = schema.UsedKey{Key: unusedKey.Key}
-		}
-
-		if err := tx.Delete(&unusedKeys).Error; err != nil {
-			return err
-		}
-
-		if err := tx.Create(&usedKeys).Error; err != nil {
-			return err
-		}
-
-		return nil
-	})
-
-	if err != nil {
-		return keys, err
+		keys = append(keys, key)
 	}
 
 	return keys, nil

@@ -10,8 +10,8 @@ const (
 	source = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
 )
 
-func insertUnusedKeys(prefix string, len int, db *gorm.DB) error {
-	if len == 1 {
+func insertUnusedKeys(prefix string, length int, db *gorm.DB) error {
+	if length == 1 {
 		keys := make([]schema.UnusedKey, 62)
 		for i, c := range source {
 			keys[i].Key = prefix + string(c)
@@ -19,7 +19,7 @@ func insertUnusedKeys(prefix string, len int, db *gorm.DB) error {
 		return db.CreateInBatches(keys, 62).Error
 	}
 	for _, c := range source {
-		err := insertUnusedKeys(prefix+string(c), len-1, db)
+		err := insertUnusedKeys(prefix+string(c), length-1, db)
 		if err != nil {
 			return err
 		}

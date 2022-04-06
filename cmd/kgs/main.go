@@ -30,6 +30,11 @@ func main() {
 		log.Fatalf("failed to migrate database: %v", err)
 	}
 
+	err = db.Exec("CREATE EXTENSION IF NOT EXISTS tsm_system_rows").Error
+	if err != nil {
+		log.Fatalf("failed to create extension: %v", err)
+	}
+
 	err = kgs.InsertUnusedKeys(db)
 	if err != nil {
 		log.Fatalf("failed to generate unused keys: %v", err)
