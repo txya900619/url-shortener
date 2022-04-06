@@ -1,6 +1,7 @@
 package kgs
 
 import (
+	"github.com/spf13/viper"
 	"github.com/txya900619/url-shortener/internal/kgs/schema"
 	"gorm.io/gorm"
 )
@@ -33,7 +34,9 @@ func InsertUnusedKeys(db *gorm.DB) error {
 			return err
 		}
 
-		if err := insertUnusedKeys("", 4, db); err != nil {
+		keyLength := viper.GetInt("KEY_LENGTH")
+
+		if err := insertUnusedKeys("", keyLength, db); err != nil {
 			return err
 		}
 

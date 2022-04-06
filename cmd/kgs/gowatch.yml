@@ -53,3 +53,4 @@ envs:
   - DB_PASSWORD=123456
   - DB_NAME=kgs
   - PORT=50051
+  - KEY_LENGTH=4
