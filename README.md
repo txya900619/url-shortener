@@ -52,3 +52,8 @@ cd cmd/shorturl \
 
 ## How to use
 See [openapi doc](https://github.com/txya900619/url-shortener/blob/main/api/openapi/shorturl.yml)
+
+## Why use these DBMS
+- PostgreSQL (TODO)
+- Redis (TODO)
+- Cassandra (TODO)
