@@ -86,9 +86,6 @@ components:
       type: object
       required:
         - slug
-        - message
       properties:
         slug:
-          type: string
-        message:
           type: string

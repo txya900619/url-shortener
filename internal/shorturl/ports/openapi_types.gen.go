@@ -9,8 +9,7 @@ import (
 
 // Error defines model for Error.
 type Error struct {
-	Message string `json:"message"`
-	Slug    string `json:"slug"`
+	Slug string `json:"slug"`
 }
 
 // PostShortUrl defines model for PostShortUrl.
