@@ -1,0 +1,35 @@
+name: tests
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - uses: actions/setup-go@v3
+      with:
+        go-version: ">=1.17"
+    - uses: actions/cache@v3
+      with:
+        path: ~/go/pkg/mod
+        key: ${{ runner.os }}-go-${{ hashFiles('**/go.sum') }}
+        restore-keys: |
+          ${{ runner.os }}-go-
+    - name: tests
+      run: |
+        go test -v ./...
+
+    - name: build kgs
+      run: |
+        go build -v ./cmd/kgs
+    
+    - name: build shorturl
+      run: |
+        go build -v ./cmd/shorturl
+    
+
