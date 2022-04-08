@@ -37,5 +37,8 @@ func main() {
 
 	ports.RegisterHandlers(router, httpServer)
 
-	router.Run(fmt.Sprintf(":%s", viper.GetString("HTTP_PORT")))
+	err = router.Run(fmt.Sprintf(":%s", viper.GetString("HTTP_PORT")))
+	if err != nil {
+		panic(err)
+	}
 }

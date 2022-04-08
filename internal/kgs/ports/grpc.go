@@ -29,21 +29,28 @@ func NewKeyServiceServer(db *gorm.DB) (*KeyServiceServer, error) {
 	}
 
 	for _, key := range keys {
-		cacheQueue.Insert(key)
+		err := cacheQueue.Insert(key)
+		if err != nil {
+			log.Printf("cacheQueue.Insert error: %v", err)
+			return nil, err
+		}
 	}
 
 	return &KeyServiceServer{db: db, cacheQueue: cacheQueue}, nil
 }
 
-func (s *KeyServiceServer) insertKey() error {
+func (s *KeyServiceServer) insertKey() {
 	key, err := generateKey(s.db)
 	if err != nil {
 		fmt.Printf("insertKey error: %v", err)
-		return s.insertKey()
+		s.insertKey()
 	}
 
-	s.cacheQueue.Insert(key)
-	return nil
+	err = s.cacheQueue.Insert(key)
+	if err != nil {
+		log.Printf("cacheQueue.Insert error: %v", err)
+	}
+
 }
 
 func (s *KeyServiceServer) GenerateKey(ctx context.Context, in *emptypb.Empty) (*kgs_grpc.GenerateKeyResponse, error) {

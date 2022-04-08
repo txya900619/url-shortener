@@ -88,7 +88,10 @@ func (s *ShortUrlService) RedirectToOriginUrl(ctx context.Context, shortUrlId st
 		}
 
 		//if found in db and not expired, add to cache
-		s.shortUrlCacheRepo.AddShortUrlCache(ctx, shortUrl) //TODO: log this error
+		err = s.shortUrlCacheRepo.AddShortUrlCache(ctx, shortUrl)
+		if err != nil {
+			log.Fatal("unable to add short url to cache")
+		}
 
 		originUrl = shortUrl.OriginUrl()
 	}
