@@ -40,13 +40,13 @@ docker run --name redis-docker -p 6379:6379 -d redis redis-server --requirepass 
 ```bash
 docker run --name cassandra-docker -p 9042:9042 bitnami/cassandra:latest
 ```
-7. Start kgs
-```
+7. Start kgs (if you want to use in production, change KEY_LENGTH to 6 or more)
+```bash
 cd cmd/kgs \
 && gowatch
 ```
 8. Start shorturl server
-```
+```bash
 cd cmd/shorturl \
 && gowatch
 ```
