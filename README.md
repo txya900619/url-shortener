@@ -8,11 +8,21 @@ URL Shortener using Key Generation Service (KGS)
 - [ ] e2e tests
 - [ ] cache when not found
 - [x] Dockerfile
-- [ ] docker-compose.yml
+- [x] docker-compose.yml
 - [x] CI/CD
 - [ ] k8s config (maybe in other repo)
 
-## Getting started 
+## Getting started
+### docker-compose
+1. download docker-compose.yml
+```bash
+wget https://raw.githubusercontent.com/txya900619/url-shortener/main/deployments/docker-compose.yml
+```
+2. docker-compose up
+```bash
+docker-compose up
+```
+### manual
 1. Install gowatch
 ```bash
 go install github.com/silenceper/gowatch@latest
