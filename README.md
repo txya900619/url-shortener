@@ -2,6 +2,7 @@
 URL Shortener using Key Generation Service (KGS)
 
 ## TODO
+- [ ] add cronjob to delete expired short url
 - [ ] better logging
 - [ ] repository tests
 - [ ] e2e tests
