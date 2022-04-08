@@ -7,9 +7,9 @@ URL Shortener using Key Generation Service (KGS)
 - [ ] repository tests
 - [ ] e2e tests
 - [ ] cache when not found
-- [ ] Dockerfile
+- [x] Dockerfile
 - [ ] docker-compose.yml
-- [ ] CI/CD
+- [x] CI/CD
 - [ ] k8s config (maybe in other repo)
 
 ## Getting started 
