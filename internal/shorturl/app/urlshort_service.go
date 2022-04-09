@@ -88,7 +88,12 @@ func (s *ShortUrlService) RedirectToOriginUrl(ctx context.Context, shortUrlId st
 				log.Fatal("unable to delete short url")
 			}
 
-			return "", pkg_errors.NewNotFoundError(err.Error(), "not-found")
+			err = s.keyService.DeleteKeys(ctx, []string{shortUrlId})
+			if err != nil {
+				log.Fatalf("unable to delete key in kgs, err: %v", err)
+			}
+
+			return "", pkg_errors.NewNotFoundError("", "not-found")
 		}
 
 		//if found in db and not expired, add to cache

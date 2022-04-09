@@ -28,3 +28,8 @@ func (s KeyGrpc) GenerateKey(ctx context.Context) (string, error) {
 
 	return resp.GetKey(), nil
 }
+
+func (s KeyGrpc) DeleteKeys(ctx context.Context, keys []string) error {
+	_, err := s.client.DeleteKeys(ctx, &kgs_grpc.DeleteKeyRequest{Keys: keys})
+	return err
+}
