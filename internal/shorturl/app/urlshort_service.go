@@ -47,7 +47,11 @@ func (s *ShortUrlService) CreateShortUrl(ctx context.Context, expireAt time.Time
 
 	shortUrl, err := shorturl.NewShortUrl(shortUrlId, expireAt, originUrl)
 	if err != nil {
-		return "", err
+		return "", pkg_errors.NewIncorrectInputError(err.Error(), "invalid-request")
+	}
+
+	if shortUrl.IsExpired() {
+		return "", pkg_errors.NewIncorrectInputError("invalid expire at", "invalid-expire-at")
 	}
 
 	//add short url to db
