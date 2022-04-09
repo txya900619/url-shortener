@@ -35,9 +35,6 @@ func TestNewShortURL_invalid(t *testing.T) {
 	_, err = shorturl.NewShortUrl(id, time.Time{}, originUrl)
 	assert.Error(t, err)
 
-	_, err = shorturl.NewShortUrl(id, time.Now().Add(-time.Second), originUrl)
-	assert.Error(t, err)
-
 	_, err = shorturl.NewShortUrl(id, expireAt, "")
 	assert.Error(t, err)
 

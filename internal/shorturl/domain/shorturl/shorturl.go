@@ -19,8 +19,8 @@ func NewShortUrl(id string, expireAt time.Time, originUrl string) (*ShortUrl, er
 	if _, err := url.ParseRequestURI(originUrl); err != nil {
 		return nil, errors.New("invalid origin url")
 	}
-	if time.Until(expireAt) <= 0 {
-		return nil, errors.New("invalid expire at")
+	if expireAt.IsZero() {
+		return nil, errors.New("empty expire at")
 	}
 
 	return &ShortUrl{
