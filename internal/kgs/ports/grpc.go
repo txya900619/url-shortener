@@ -71,18 +71,16 @@ func (s *KeyServiceServer) DeleteKeys(ctx context.Context, in *kgs_grpc.DeleteKe
 	err := s.db.Transaction(func(tx *gorm.DB) error {
 		for _, key := range in.Keys {
 			if err := s.db.Delete(&schema.UsedKey{Key: key}).Error; err != nil {
-				tx.Rollback()
 				return err
 			}
 
 			if err := s.db.Create(&schema.UnusedKey{Key: key}).Error; err != nil {
-				tx.Rollback()
 				return err
 			}
 
 		}
 
-		return tx.Commit().Error
+		return nil
 	})
 
 	if err != nil {
